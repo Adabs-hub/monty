@@ -55,7 +55,7 @@ typedef struct data
 extern data_t param;
 
 	/*getfunc.c*/
-	int (*get_opcodeFunc(data_t *param))(stack_t **, unsigned int);
+	int (*get_opcodeFunc(void))(stack_t **, unsigned int);
 	void freeParam(void);
 	/*main.c*/
 	int isInt(char *str);
@@ -70,6 +70,13 @@ extern data_t param;
 	void _pall(stack_t **headptr, unsigned int line_count);
 	void _pop(stack_t **headptr, unsigned int line_count);
 	void _swap(stack_t **headptr, unsigned int line_count);
+	void pint(stack_t **headptr, unsigned int line_count);
+
+	/*func_d_linkedlist*/
+	stack_t *add_dnodeint_end(stack_t **head, const int n);
+	stack_t *add_dnodeint(stack_t **head, const int n);
+	void free_dlistint(stack_t *head);
+
 
 	
 

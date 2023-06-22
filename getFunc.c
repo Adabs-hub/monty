@@ -6,7 +6,7 @@
  * Return: pointer to function pointer
  */
 
-int (*get_opcodeFunc())(stack_t **, unsigned int)
+int (*get_opcodeFunc(void))(stack_t **, unsigned int)
 {
 	instruction_t func_arr[] = {
 	{"push", _push},
@@ -14,7 +14,7 @@ int (*get_opcodeFunc())(stack_t **, unsigned int)
 	{"pint", pint},
 	{"pop", _pop},
 	{"swap", _swap},
-	{"NULL", NULL}
+	{"NULL", NULL},
 	}
 	int i = 0;
 
@@ -26,7 +26,7 @@ int (*get_opcodeFunc())(stack_t **, unsigned int)
 		}
 		i++;
 	}
-	freeParam(param);
+	freeParam();
 	fprintf(stderr, "L%u: unknown instruction %s", param.line_number, param.opcode);
 	exit(EXIT_FAILURE);
 	return (0);

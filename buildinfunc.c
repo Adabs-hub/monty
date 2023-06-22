@@ -9,11 +9,12 @@
  */
 void _push(stack_t **headptr, unsigned int line_count)
 {
-
+	(void)line_count;
 	if (param.top == 1)
-		add_dnodeint(headptr, n);
+		add_dnodeint(headptr, param.value);
+
 	else
-		add_dnodeint_end(headptr, n);
+		add_dnodeint_end(headptr, param.value);
 }
 
 /**

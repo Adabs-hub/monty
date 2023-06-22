@@ -12,7 +12,7 @@ data_t param;
 int main(int argc, char **argv)
 {
 	char *read_line = NULL, *ch_value = NULL;
-	ssize_t chread = 0;
+	size_t chread = 0;
 	void (*f)(stack_t **stack, unsigned int line_number);
 
 	initialize_param();
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
 	param.readfd = fopen(argv[1], "rb");
 
-	if (opcode_file == NULL)
+	if (param.readfd == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
