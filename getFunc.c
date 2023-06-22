@@ -9,8 +9,11 @@
 int (*get_opcodeFunc())(stack_t **, unsigned int)
 {
 	instruction_t func_arr[] = {
-	{"push", push},
-	{"pall", pall},
+	{"push", _push},
+	{"pall", _pall},
+	{"pint", pint},
+	{"pop", _pop},
+	{"swap", _swap},
 	{"NULL", NULL}
 	}
 	int i = 0;

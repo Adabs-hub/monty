@@ -63,6 +63,12 @@ extern data_t param;
 	void initialize_param(void);
 	void freeParam(void);
 
+	/*buildinfunc.c*/
+	void _push(stack_t **headptr, unsigned int line_count);
+	void _pall(stack_t **headptr, unsigned int line_count);
+	void _pop(stack_t **headptr, unsigned int line_count);
+	void _swap(stack_t **headptr, unsigned int line_count);
+
 	
 
 #endif /*_MONTY_H*/

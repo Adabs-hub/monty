@@ -3,11 +3,11 @@
 /**
  * _push - pushes an element to the stack
  *
- * @doubly: head of the linked list
+ * @headptr: head of the linked list
  * @line_count: line number
  * Return: no return
  */
-void _push(stack_t **doubly, unsigned int line_count)
+void _push(stack_t **headptr, unsigned int line_count)
 {
 	int n, j;
 
@@ -33,24 +33,24 @@ void _push(stack_t **doubly, unsigned int line_count)
 	n = atoi(vglo.arg);
 
 	if (vglo.lifo == 1)
-		add_dnodeint(doubly, n);
+		add_dnodeint(headptr, n);
 	else
-		add_dnodeint_end(doubly, n);
+		add_dnodeint_end(headptr, n);
 }
 
 /**
  * _pall - prints all values on the stack
  *
- * @doubly: head of the linked list
+ * @headptr: head of the linked list
  * @line_count: line numbers
  * Return: no return
  */
-void _pall(stack_t **doubly, unsigned int line_count)
+void _pall(stack_t **headptr, unsigned int line_count)
 {
 	stack_t *aux;
 	(void)line_count;
 
-	aux = *doubly;
+	aux = *headptr;
 
 	while (aux)
 	{
@@ -62,15 +62,15 @@ void _pall(stack_t **doubly, unsigned int line_count)
 /**
  * _pint - prints the value at the top of the stack
  *
- * @doubly: head of the linked list
+ * @headptr: head of the linked list
  * @line_count: line number
  * Return: no return
  */
-void pint(stack_t **doubly, unsigned int line_count)
+void pint(stack_t **headptr, unsigned int line_count)
 {
 	(void)line_count;
 
-	if (*doubly == NULL)
+	if (*headptr == NULL)
 	{
 		dprintf(2, "L%u: ", line_count);
 		dprintf(2, "can't pint, stack empty\n");
@@ -78,44 +78,44 @@ void pint(stack_t **doubly, unsigned int line_count)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("%d\n", (*doubly)->n);
+	printf("%d\n", (*headptr)->n);
 }
 
 /**
  * _pop - removes the top element of the stack
  *
- * @doubly: head of the linked list
+ * @headptr: head of the linked list
  * @line_count: line number
  * Return: no return
  */
-void _pop(stack_t **doubly, unsigned int line_count)
+void _pop(stack_t **headptr, unsigned int line_count)
 {
 	stack_t *aux;
 
-	if (doubly == NULL || *doubly == NULL)
+	if (headptr == NULL || *headptr == NULL)
 	{
 		dprintf(2, "L%u: can't pop an empty stack\n", line_count);
 		free_vglo();
 		exit(EXIT_FAILURE);
 	}
-	aux = *doubly;
-	*doubly = (*doubly)->next;
+	aux = *headptr;
+	*headptr = (*headptr)->next;
 	free(aux);
 }
 
 /**
  * _swap - swaps the top two elements of the stack
  *
- * @doubly: head of the linked list
+ * @headptr: head of the linked list
  * @line_count: line number
  * Return: no return
  */
-void _swap(stack_t **doubly, unsigned int line_count)
+void _swap(stack_t **headptr, unsigned int line_count)
 {
 	int m = 0;
 	stack_t *aux = NULL;
 
-	aux = *doubly;
+	aux = *headptr;
 
 	for (; aux != NULL; aux = aux->next, m++)
 		;
@@ -127,10 +127,10 @@ void _swap(stack_t **doubly, unsigned int line_count)
 		exit(EXIT_FAILURE);
 	}
 
-	aux = *doubly;
-	*doubly = (*doubly)->next;
-	aux->next = (*doubly)->next;
-	aux->prev = *doubly;
-	(*doubly)->next = aux;
-	(*doubly)->prev = NULL;
+	aux = *headptr;
+	*headptr = (*headptr)->next;
+	aux->next = (*headptr)->next;
+	aux->prev = *headptr;
+	(*headptr)->next = aux;
+	(*headptr)->prev = NULL;
 }
