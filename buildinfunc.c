@@ -9,30 +9,8 @@
  */
 void _push(stack_t **headptr, unsigned int line_count)
 {
-	int n, j;
 
-	if (!vglo.arg)
-	{
-		dprintf(2, "L%u: ", line_count);
-		dprintf(2, "usage: push integer\n");
-		free_vglo();
-		exit(EXIT_FAILURE);
-	}
-
-	for (j = 0; vglo.arg[j] != '\0'; j++)
-	{
-		if (!isdigit(vglo.arg[j]) && vglo.arg[j] != '-')
-		{
-			dprintf(2, "L%u: ", line_count);
-			dprintf(2, "usage: push integer\n");
-			free_vglo();
-			exit(EXIT_FAILURE);
-		}
-	}
-
-	n = atoi(vglo.arg);
-
-	if (vglo.lifo == 1)
+	if (param.top == 1)
 		add_dnodeint(headptr, n);
 	else
 		add_dnodeint_end(headptr, n);
@@ -72,9 +50,9 @@ void pint(stack_t **headptr, unsigned int line_count)
 
 	if (*headptr == NULL)
 	{
-		dprintf(2, "L%u: ", line_count);
-		dprintf(2, "can't pint, stack empty\n");
-		free_vglo();
+		fprintf(stderr, "L%u: ", line_count);
+		fprintf(stderr, "can't pint, stack empty\n");
+		freeParam();
 		exit(EXIT_FAILURE);
 	}
 
@@ -94,8 +72,8 @@ void _pop(stack_t **headptr, unsigned int line_count)
 
 	if (headptr == NULL || *headptr == NULL)
 	{
-		dprintf(2, "L%u: can't pop an empty stack\n", line_count);
-		free_vglo();
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_count);
+		freeParam();
 		exit(EXIT_FAILURE);
 	}
 	aux = *headptr;
@@ -122,8 +100,8 @@ void _swap(stack_t **headptr, unsigned int line_count)
 
 	if (m < 2)
 	{
-		dprintf(2, "L%u: can't swap, stack too short\n", line_count);
-		free_vglo();
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_count);
+		freeParam();
 		exit(EXIT_FAILURE);
 	}
 

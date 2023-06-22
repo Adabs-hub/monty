@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
+#include <stddef.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -42,7 +44,7 @@ typedef struct instruction_s
 typedef struct data
 {
 	char *headptr;
-	char *upcode;
+	char *opcode;
 	int value;
 	int top;
 	unsigned int line_number;
@@ -54,7 +56,7 @@ extern data_t param;
 
 	/*getfunc.c*/
 	int (*get_opcodeFunc(data_t *param))(stack_t **, unsigned int);
-	freeParam(data_t *param);
+	void freeParam(void);
 	/*main.c*/
 	int isInt(char *str);
 	char *trim_word(char **str);
