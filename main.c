@@ -1,123 +1,104 @@
 #include "monty.h"
-#define  _GNU_SOURCE
-#include <stdio.h>
-
-/**
- * main - main program entery
- * @argc: number argsd
- * @argv: string vectors
- * Return: 0 on success, 1 otherwise
- */
 
 data_t param;
 
-int main(int argc, char **argv)
+/**
+ * freeParam - frees the global variables
+ *
+ * Return: no return
+ */
+void freeParam(void)
 {
-	char *read_line = NULL, *ch_value = NULL;
-	int chread = 0;
-	size_t buf_len = 128;
+	free_dlistint(param.head);
+	free(param.buffer);
+	fclose(param.fd);
+}
 
-	initialize_param();
+/**
+ * start_param - initializes the global variables
+ *
+ * @fd: file descriptor
+ * Return: no return
+ */
+void start_param(FILE *fd)
+{
+	param.lifo = 1;
+	param.cont = 1;
+	param.arg = NULL;
+	param.head = NULL;
+	param.fd = fd;
+	param.buffer = NULL;
+}
 
-	if (argc != 2)
+/**
+ * check_input - checks if the file exists and if the file can
+ * be opened
+ *
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: file struct
+ */
+FILE *check_input(int argc, char *argv[])
+{
+	FILE *fd;
+
+	if (argc == 1 || argc > 2)
 	{
-		fprintf(stderr, "USAGE: monty file\n");
+		dprintf(2, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
 
-	param.readfd = fopen(argv[1], "rb");
+	fd = fopen(argv[1], "r");
 
-	if (param.readfd == NULL)
+	if (fd == NULL)
 	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		dprintf(2, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
 
-	chread = getline(&read_line, &buf_len, param.readfd);
-	while (chread != -1)
+	return (fd);
+}
+
+/**
+ * main - Entry point
+ *
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: 0 on success
+ */
+
+int main(int argc, char *argv[])
+{
+	void (*f)(stack_t **stack, unsigned int line_number);
+	FILE *fd;
+	size_t size = 256;
+	ssize_t nlines = 0;
+	char *lines[2] = {NULL, NULL};
+
+	fd = check_input(argc, argv);
+	start_param(fd);
+	nlines = getline(&param.buffer, &size, fd);
+	while (nlines != -1)
 	{
-		param.line_number++;
-		param.opcode = strtok(read_line, " \t\n");
-		trim_word(&param.opcode);
-		ch_value = strtok(NULL, " \t\n");
-		trim_word(&ch_value);
-		toInt(ch_value);
-
-		get_opcodeFunc(chread);
-
-
-		chread = getline(&read_line, &buf_len, param.readfd);
-
-
+		lines[0] = _strtoken(param.buffer, " \t\n");
+		if (lines[0] && lines[0][0] != '#')
+		{
+			f = get_opcodes(lines[0]);
+			if (!f)
+			{
+				dprintf(2, "L%u: ", param.cont);
+				dprintf(2, "unknown instruction %s\n", lines[0]);
+				freeParam();
+				exit(EXIT_FAILURE);
+			}
+			param.arg = _strtoken(NULL, " \t\n");
+			f(&param.head, param.cont);
+		}
+		nlines = getline(&param.buffer, &size, fd);
+		param.cont++;
 	}
 
 	freeParam();
-	exit(EXIT_SUCCESS);
+
 	return (0);
 }
-
-/**
- * trim_word - trim leading and trailing spaces
- * @str: input string
- * Return: new string;
- */
-char *trim_word(char **str)
-{
-	int  i,j;
-	char *s = NULL;
-
-	if (str == NULL || *str == NULL)
-		return (NULL);
-	s = *str;
-	for(i=0; s[i] == ' ' || s[i] == '\t'; i++);
-
-	for(j=0;s[i];i++)
-	{
-		s[j++]=s[i];
-	}
-	s[j]='\0';
-	for(i=0;s[i]!='\0';i++)
-	{
-		if(s[i]!=' '&& s[i]!='\t')
-				j=i;
-	}
-	s[j+1]='\0';
-
-	return (s);
-}
-
-/**
- * isInt - check is string is an int
- * @str: string arg
- * Return: 0 if an INT 1 if otherwise
- */
-void toInt(char *str)
-{
-	int str_len = 0, j = 0;
-
-	if (strcmp(param.opcode, "push") == 0)
-	{
-		if (str != NULL)
-		{
-			str_len = strlen(str);
-			while (j < str_len)
-			{
-				if (str[j] > 47 && str[j] < 58)
-					j++;
-				else
-					break;
-
-				j++;
-			}
-		}
-		else
-			if (j != str_len)
-			{
-				fprintf(stderr, "L%u: usage: push integer\n", param.line_number);
-				exit(EXIT_FAILURE);
-			}
-
-		param.value = atoi(str);
-	}
-}
-
