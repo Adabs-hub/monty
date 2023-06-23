@@ -26,16 +26,14 @@ typedef struct stack_s
 } stack_t;
 
 /**
- * struct globals - global structure to use in the functions
+ * struct data_s - structure use for global data management
  * @lifo: is stack or queue
  * @cont: current line
- * @arg: second parameter inside the current line
+ * @arg: second parameter
  * @head: headptr linked list
  * @fd: file descriptor
  * @buffer: input text
  *
- * Description: headptr linked list node structure
- * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct data_s
 {
