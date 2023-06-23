@@ -7,7 +7,7 @@
 void initialize_param(void)
 {
 	param.headptr = NULL;
-	param.upcode = NULL;
+	param.opcode = NULL;
 	param.value = 0;
 	param.top = -1;
 	param.line_number = 0;
@@ -21,13 +21,9 @@ void initialize_param(void)
  */
 void freeParam(void)
 {
-
-	if (param != NULL)
-	{
-		if (param.opcode != NULL)
-			free(param.opcode);
-		if (param.headptr != NULL)
-			free_dlistint(param.headptr);
-		fclose(param.readfd);
-	}
+	if (param.opcode != NULL)
+		free(param.opcode);
+	if (param.headptr != NULL)
+		free_dlistint(param.headptr);
+	fclose(param.readfd);
 }

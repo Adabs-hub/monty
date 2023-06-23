@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <stddef.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <ctype.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -43,7 +47,7 @@ typedef struct instruction_s
  */
 typedef struct data
 {
-	char *headptr;
+	stack_t *headptr;
 	char *opcode;
 	int value;
 	int top;
@@ -54,11 +58,12 @@ typedef struct data
 
 extern data_t param;
 
+	 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 	/*getfunc.c*/
-	int (*get_opcodeFunc(void))(stack_t **, unsigned int);
+	void (*get_opcodeFunc())(stack_t **, unsigned int);
 	void freeParam(void);
 	/*main.c*/
-	int isInt(char *str);
+	void toInt(char *str);
 	char *trim_word(char **str);
 
 	/*param.c*/

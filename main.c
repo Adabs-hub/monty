@@ -1,4 +1,6 @@
 #include "monty.h"
+#define  _GNU_SOURCE
+#include <stdio.h>
 
 /**
  * main - main program entery
@@ -12,9 +14,8 @@ data_t param;
 int main(int argc, char **argv)
 {
 	char *read_line = NULL, *ch_value = NULL;
-	size_t chread = 0;
-	void (*f)(stack_t **stack, unsigned int line_number);
-
+	int chread = 0;
+	size_t buf_len = 128;
 	initialize_param();
 
 	if (argc != 2)
@@ -31,7 +32,7 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	chread = getline(&read_line, 128, param.readfd);
+	chread = getline(&read_line, &buf_len, param.readfd);
 	while (chread != -1)
 	{
 		param.line_number++;
@@ -40,17 +41,17 @@ int main(int argc, char **argv)
 		ch_value = strtok(NULL, " \t\n");
 		toInt(ch_value);
 
-		f = get_opcodeFunc();
+		get_opcodeFunc(chread);
 
-		f(&param.headptr, param.line_number);
 
-		chread = getline(&read_line, 128, param.readfd);
+		chread = getline(&read_line, &buf_len, param.readfd);
 
 
 	}
 
 	freeParam();
-
+	exit(EXIT_SUCCESS);
+	return (0);
 }
 
 /**
@@ -88,7 +89,7 @@ char *trim_word(char **str)
  * @str: string arg
  * Return: 0 if an INT 1 if otherwise
  */
-int toInt(char *str)
+void toInt(char *str)
 {
 	int str_len = strlen(str), j = 0;
 
