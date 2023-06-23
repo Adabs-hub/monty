@@ -8,19 +8,18 @@
  */
 stack_t *add_dnodeint_end(stack_t **head, const int n)
 {
-	stack_t *temp, *aux;
+	stack_t *temp, *current;
 
 	if (head == NULL)
 		return (NULL);
 	temp = malloc(sizeof(stack_t));
 	if (!temp)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
+		dprintf(2, "Error: malloc failed\n");
 		freeParam();
 		exit(EXIT_FAILURE);
 	}
 	temp->n = n;
-	/*Careful with the first time*/
 	if (*head == NULL)
 	{
 		temp->next = *head;
@@ -28,13 +27,13 @@ stack_t *add_dnodeint_end(stack_t **head, const int n)
 		*head = temp;
 		return (*head);
 	}
-	aux = *head;
-	while (aux->next)
-		aux = aux->next;
-	temp->next = aux->next;
-	temp->prev = aux;
-	aux->next = temp;
-	return (aux->next);
+	current = *head;
+	while (current->next)
+		current = current->next;
+	temp->next = current->next;
+	temp->prev = current;
+	current->next = temp;
+	return (current->next);
 }
 
 /**
@@ -52,12 +51,11 @@ stack_t *add_dnodeint(stack_t **head, const int n)
 	temp = malloc(sizeof(stack_t));
 	if (!temp)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
+		dprintf(2, "Error: malloc failed\n");
 		freeParam();
 		exit(EXIT_FAILURE);
 	}
 	temp->n = n;
-	/*Careful with the first time*/
 	if (*head == NULL)
 	{
 		temp->next = *head;
