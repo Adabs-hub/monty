@@ -38,8 +38,9 @@ int main(int argc, char **argv)
 	{
 		param.line_number++;
 		param.opcode = strtok(read_line, " \t\n");
+		trim_word(&param.opcode);
 		ch_value = strtok(NULL, " \t\n");
-
+		trim_word(&ch_value);
 		toInt(ch_value);
 
 		get_opcodeFunc(chread);
