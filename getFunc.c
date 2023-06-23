@@ -1,41 +1,42 @@
 #include "monty.h"
 
 /**
- * get_buildInFunc - get select build in function
- * @param: commands to run  (char)
- * Return: pointer to function pointer
+ * get_opcodes - selects opcode fuction for right operation
+ *
+ * @opcode: opcode passed
+ *
+ * Return: pointer to the function
  */
-
-void (*get_opcodeFunc())(stack_t **, unsigned int)
+void (*get_opcodes(char *opcode))(stack_t **stack, unsigned int line_number)
 {
-	void (*f)(stack_t **stack, unsigned int line_number);
-	instruction_t func_arr[] = {
-	{"push", _push},
-	{"pall", _pall},
-	{"pint", pint},
-	{"pop", _pop},
-	{"swap", _swap},
-	{"NULL", NULL}
+	instruction_t instruct[] = {
+		{"push", _push},
+		{"pall", _pall},
+		{"pint", _pint},
+		{"pop", _pop},
+		{"swap", _swap},
+		{"queue", _queue},
+		{"stack", _stack},
+		{"add", _add},
+		{"nop", _nop},
+		{"sub", _sub},
+		{"mul", _mul},
+		{"div", _div},
+		{"mod", _mod},
+		{"pchar", _pchar},
+		{"pstr", _pstr},
+		{"rotl", _rotl},
+		{"rotr", _rotr},
+		{NULL, NULL}
 	};
 	int i = 0;
 
-	f = NULL;
-	while (i < 6)
+	while (instruct[i].opcode)
 	{
-		if ((strcmp(func_arr[i].opcode, param.opcode) == 0))
-		{
-			f = func_arr[i].f;
-		}
+		if (_strcmp(instruct[i].opcode, opcode) == 0)
+			break;
 		i++;
 	}
 
-	if (f != NULL)
-		f(&param.headptr, param.line_number);
-	else
-	{
-		freeParam();
-		fprintf(stderr, "L%u: unknown instruction %s\n", param.line_number, param.opcode);
-		exit(EXIT_FAILURE);
-	}
-return (0);
+	return (instruct[i].f);
 }
