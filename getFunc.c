@@ -20,7 +20,7 @@ void (*get_opcodeFunc())(stack_t **, unsigned int)
 	int i = 0;
 
 	f = NULL;
-	while (i < 7)
+	while (i < 6)
 	{
 		if ((strcmp(func_arr[i].opcode, param.opcode) == 0))
 		{

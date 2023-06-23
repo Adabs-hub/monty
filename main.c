@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 	char *read_line = NULL, *ch_value = NULL;
 	int chread = 0;
 	size_t buf_len = 128;
+
 	initialize_param();
 
 	if (argc != 2)
@@ -37,8 +38,8 @@ int main(int argc, char **argv)
 	{
 		param.line_number++;
 		param.opcode = strtok(read_line, " \t\n");
-		trim_word(&param.opcode);
 		ch_value = strtok(NULL, " \t\n");
+
 		toInt(ch_value);
 
 		get_opcodeFunc(chread);
@@ -91,26 +92,31 @@ char *trim_word(char **str)
  */
 void toInt(char *str)
 {
-	int str_len = strlen(str), j = 0;
+	int str_len = 0, j = 0;
 
-	if (str != NULL)
-		while (j < str_len)
-		{
-			if (str[j] > 47 && str[j] < 58)
-				j++;
-			else
-				break;
-
-		}
-	else
-		j++;
-	
-	if (j != str_len)
+	if (strcmp(param.opcode, "push") == 0)
 	{
-		fprintf(stderr, "L%u: usage: push integer", param.line_number);
-		exit(EXIT_FAILURE);
+		if (str != NULL)
+		{
+			str_len = strlen(str);
+			while (j < str_len)
+			{
+				if (str[j] > 47 && str[j] < 58)
+					j++;
+				else
+					break;
+
+				j++;
+			}
+		}
+		else
+			if (j != str_len)
+			{
+				fprintf(stderr, "L%u: usage: push integer\n", param.line_number);
+				exit(EXIT_FAILURE);
+			}
+
+		param.value = atoi(str);
 	}
-	
-	param.value = atoi(str);
 }
 
